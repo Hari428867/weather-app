@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Info</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #dceeff, #f4f9ff);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .weather-card {
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .weather-card img {
+            vertical-align: middle;
+        }
+
+        .forecast-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .forecast-item img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .forecast {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffffb0;
+            border-radius: 12px;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather Info</h1>
+    <form method="POST">
+        <input type="text" name="city" placeholder="Enter city name" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if weather %}
+        <div class="weather-card">
+            <h2>Current Weather in {{ weather.city }}, {{ weather.region }}, {{ weather.country }}</h2>
+            <img src="{{ weather.icon }}" alt="weather-icon">
+            <p><span class="label">Condition:</span> {{ weather.condition }}</p>
+            <p><span class="label">Temperature:</span> {{ weather.temperature }} °C</p>
+            <p><span class="label">Feels Like:</span> {{ weather.feelslike }} °C</p>
+            <p><span class="label">Humidity:</span> {{ weather.humidity }}%</p>
+            <p><span class="label">Wind:</span> {{ weather.wind_kph }} kph ({{ weather.wind_dir }})</p>
+            <p><span class="label">Sunrise:</span> {{ weather.sunrise }} |
+               <span class="label">Sunset:</span> {{ weather.sunset }}</p>
+            <p><span class="label">Moon Phase:</span> {{ weather.moon_phase }} ({{ weather.moon_illumination }}%)</p>
+        </div>
+    {% endif %}
+
+    {% if forecast %}
+        <div class="forecast">
+            <h3>3-Day Forecast</h3>
+            {% for day in forecast %}
+                <div class="forecast-item">
+                    <div>{{ day.date }}: {{ day.condition }}</div>
+                    <img src="{{ day.icon }}" alt="forecast-icon">
+                    <div>({{ day.maxtemp_c }}°C / {{ day.mintemp_c }}°C)</div>
+                    <div>🌧️ {{ day.chance_of_rain }}% chance of rain</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</body>
+</html>
